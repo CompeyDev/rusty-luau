@@ -21,17 +21,34 @@ function Option.new<T>(val: T?)
 		{
 			__index = Option,
 			__tostring = function<T>(self: Option<T>)
-				-- TODO: Return formatted enum variants too
-
 				if self._optValue == nil then
 					return `{self.typeId}::None`
 				else
 					return `{self.typeId}::Some({self._optValue})`
 				end
 			end,
+
+			__eq = function<T>(self: Option<T>, other: Option<T>): boolean
+				return self._optValue == other._optValue
+			end,
+			__lt = function<T>(self: Option<T>, other: Option<T>): boolean
+				if self:isSome() and other:isSome() then
+					-- FIXME: TypeError: Type T cannot be compared with < because it has no metatable
+					return (self._optValue :: T) < (other._optValue :: T)
+				end
+
+				return false
+			end,
+			__le = function<T>(self: Option<T>, other: Option<T>): boolean
+				if self:isSome() and other:isSome() then
+					-- FIXME: TypeError: Type T cannot be compared with <= because it has no metatable
+					return (self._optValue :: T) <= (other._optValue :: T)
+				end
+
+				return false
+			end,
 		}
 
-		-- TODO: Implement equality and arithmetic metamethods
 		-- TODO: Implement __iter, once iterators traits exist
 	)
 end
@@ -248,6 +265,10 @@ function Option.unzip<T, A, B>(self: Option<T>): (Option<A>, Option<B>)
 	end
 
 	return None(), None()
+end
+
+function Option.getInner<T>(self: Option<T>): T?
+	return self._optValue
 end
 
 return {
