@@ -30,14 +30,14 @@ function Result.new<T, E>(val: T, err: E)
 			__index = Result,
 			__tostring = function<T, E>(self: Result<T, E>)
 				if self:isOk() then
-					return `{self.typeId}::Ok<{self._value}>`
+					return `{self.typeId}::Ok({self._value})`
 				end
 
 				if self:isErr() then
-					return `{self.typeId}::Err<{self._error}>`
+					return `{self.typeId}::Err({self._error})`
 				end
 
-				return `{self.typeId}}<T, E>`
+				return `{self.typeId}<T, E>`
 			end,
 			__eq = function<T, E>(self: Result<T, E>, other: Result<T, E>)
 				if
@@ -267,7 +267,7 @@ function Result.transpose<T, E>(self: Result<Option<T>, E>): Option<Result<T, E>
 		return None()
 	elseif self:isOkAnd(function(val): boolean
 		return val._optValue == nil
-	end) ~= nil then
+	end) then
 		return Some(Ok(self._value._optValue))
 	elseif self:isErr() then
 		return Some(Err(self._error))
@@ -275,3 +275,15 @@ function Result.transpose<T, E>(self: Result<Option<T>, E>): Option<Result<T, E>
 
 	error("`Result` is not transposable")
 end
+
+local x: Result<Option<string>, string> = Ok(None())
+
+print(tostring(x))
+
+return {
+	Ok = Ok,
+	Err = Err,
+	Result = Result,
+}
+
+-- print(y:transpose()) -- this should have a typeerror, i need to fix this
