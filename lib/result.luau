@@ -1,9 +1,3 @@
-local option = require("option")
-local Option = option.Option
-type Option<T> = option.Option<T>
-local None = option.None
-local Some = option.Some
-
 local Result = {}
 export type Result<T, E> = typeof(Result) & {
 	_value: T,
@@ -52,6 +46,7 @@ function Result.new<T, E>(val: T, err: E)
 				error(`eq: cannot compare {tostring(self)} and {tostring(other)}`)
 			end,
 
+			-- TODO: Implement equality and arithmetic metamethods
 			-- TODO: Implement __iter, once iterators traits exist
 		}
 	)
@@ -79,26 +74,6 @@ function Result.isErrAnd<T, E>(self: Result<T, E>, predicate: (val: E) -> boolea
 	end
 
 	return false
-end
-
-function Result.ok<T, E>(self: Result<T, E>): Option<T>
-	if self:isOk() then
-		if self._value == nil then
-			return None()
-		end
-
-		return Some(self._value)
-	end
-
-	return None()
-end
-
-function Result.err<T, E>(self: Result<T, E>): Option<E>
-	if self:isErr() then
-		return Option.new(self._error) :: Option<E>
-	end
-
-	return None()
 end
 
 function Result.map<T, E, U>(self: Result<T, E>, op: (val: T) -> U): Result<U, E>
@@ -260,30 +235,8 @@ function Result.containsErr<T, E>(self: Result<T, E>, err: E): boolean
 	return false
 end
 
-function Result.transpose<T, E>(self: Result<Option<T>, E>): Option<Result<T, E>>
-	-- TODO: Instead of checking whether values are nil, use
-	-- utility methods for Options once available
-	if self._value == None() then
-		return None()
-	elseif self:isOkAnd(function(val): boolean
-		return val._optValue == nil
-	end) then
-		return Some(Ok(self._value._optValue))
-	elseif self:isErr() then
-		return Some(Err(self._error))
-	end
-
-	error("`Result` is not transposable")
-end
-
-local x: Result<Option<string>, string> = Ok(None())
-
-print(tostring(x))
-
 return {
 	Ok = Ok,
 	Err = Err,
 	Result = Result,
 }
-
--- print(y:transpose()) -- this should have a typeerror, i need to fix this
