@@ -9,8 +9,6 @@ local None = option.None
 
 local result = require("result")
 type Result<T, E> = result.Result<T, E>
-local Ok = result.Ok
-local Err = result.Err
 
 local Iter = {}
 type Iter<T> = typeof(Iter) & {
