@@ -1,4 +1,4 @@
-local result = require("lib/result")
+local result = require("../lib/result")
 type Result<T, E> = result.Result<T, E>
 local Ok = result.Ok
 local Err = result.Err
