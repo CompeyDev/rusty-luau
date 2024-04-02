@@ -33,16 +33,14 @@ function Option.new<T>(val: T?)
 			end,
 			__lt = function<T>(self: Option<T>, other: Option<T>): boolean
 				if self:isSome() and other:isSome() then
-					-- FIXME: TypeError: Type T cannot be compared with < because it has no metatable
-					return (self._optValue :: T) < (other._optValue :: T)
+					return (self._optValue :: any) < (other._optValue :: any)
 				end
 
 				return false
 			end,
 			__le = function<T>(self: Option<T>, other: Option<T>): boolean
 				if self:isSome() and other:isSome() then
-					-- FIXME: TypeError: Type T cannot be compared with <= because it has no metatable
-					return (self._optValue :: T) <= (other._optValue :: T)
+					return (self._optValue :: any) <= (other._optValue :: any)
 				end
 
 				return false
