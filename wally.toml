@@ -8,3 +8,4 @@ exclude = ["tests/**", "examples/**", "**"]
 include = ["lib/**", "LICENSE.md", "README.md", "wally.toml"]
 
 [dependencies]
+luausignal = "ffrostflame/luausignal@0.2.4"
