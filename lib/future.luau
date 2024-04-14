@@ -4,16 +4,11 @@ local mod = require("../mod")
 local Signal = mod.signal
 type Signal<T...> = mod.Signal<T...>
 
-local option = require("option")
-type Option<T> = option.Option<T>
-local Some = option.Some
-local None = option.None
-
 local Future = {}
 export type Status = "initialized" | "running" | "cancelled" | "done"
 export type Future<T> = typeof(Future) & {
 	_fn: (set: (value: T) -> ()) -> T,
-	_ret: T?,
+	_ret: T,
 	_thread: thread,
 	_spawnEvt: Signal<()>,
 	_retEvt: Signal<T, Status>,
@@ -40,7 +35,7 @@ function Future.new<T>(fn: (...any) -> T, args: { any })
 	)
 end
 
-function Future.poll<T>(self: Future<T>): (Status, Option<T>)
+function Future.poll<T>(self: Future<T>): (Status, T)
 	if self._status == "initialized" then
 		self._retEvt:Connect(function(firedRet, status: Status)
 			self._status = status
@@ -66,8 +61,7 @@ function Future.poll<T>(self: Future<T>): (Status, Option<T>)
 		task.wait(0.01)
 	end
 
-	local retOpt = if self._ret == nil then None() else Some(self._ret)
-	return self._status, retOpt
+	return self._status, self._ret
 end
 
 function Future.cancel<T>(self: Future<T>)
