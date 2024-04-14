@@ -97,3 +97,5 @@ function Future.await<T>(self: Future<T>): T
 		end
 	end
 end
+
+return Future
