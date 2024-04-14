@@ -5,7 +5,7 @@ local Signal = mod.signal
 type Signal<T...> = mod.Signal<T...>
 
 local result = require("result")
-export type Result<T, E> = result.Result<T, E>
+type Result<T, E> = result.Result<T, E>
 local Ok = result.Ok
 local Err = result.Err
 
