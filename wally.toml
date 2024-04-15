@@ -4,7 +4,15 @@ version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 license = "AGPL-3.0"
-exclude = ["tests/**", "examples/**"]
+exclude = [
+    "tests/**",
+    "examples/**",
+    ".vscode/**",
+    "aftman.toml",
+    ".gitignore",
+    ".gitattributes",
+    "CHANGELOG.md",
+]
 include = ["lib/*.luau", "LICENSE.md", "README.md", "wally.toml"]
 
 [dependencies]
