@@ -1,3 +1,4 @@
+-- From https://gist.github.com/sapphyrus/fd9aeb871e3ce966cc4b0b969f62f539
 local function tableEq(tbl1, tbl2)
 	if tbl1 == tbl2 then
 		return true
