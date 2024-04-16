@@ -63,7 +63,8 @@ export type Status = "initialized" | "pending" | "cancelled" | "ready"
 	@interface Future<T>
 	@within Future
 
-	This is a dictionary that may contain one or more of the following values:
+	Represents the internal state of a [Future].
+	
 	@field _thread thread -- The background coroutine spawned for execution 
 	@field _ret T -- The value returned once execution has halted
 	@field _spawnEvt Signal<()> -- Event for internal communication among threads pre execution

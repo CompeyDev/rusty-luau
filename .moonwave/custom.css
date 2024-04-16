@@ -1,0 +1,42 @@
+@import url("https://Cinnab0nBak3ry.github.io/AppleFontsCSS/Apple-fonts.css");
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+    --ifm-color-primary: #cba6f7;
+    --ifm-color-primary-dark: #b580f4;
+    --ifm-color-primary-darker: #aa6df2;
+    --ifm-color-primary-darkest: #8934ed;
+    --ifm-color-primary-light: #e1ccfa;
+    --ifm-color-primary-lighter: #ecdffc;
+    --ifm-color-primary-lightest: #ffffff;
+
+    --ifm-footer-color: ##a6adc8;
+    --ifm-footer-background-color: #45475a;
+
+    --ifm-font-family-base: "SF Pro Display";
+    --ifm-font-family-monospace: "JetBrains Mono";
+    --ifm-font-family-monospace: "JetBrains Mono";
+    --ifm-code-font-size: 80%;
+}
+
+/* Catppuccin Mocha from https://github.com/catppuccin/catppuccin?tab=readme-ov-file#-palette */
+
+[data-theme='dark']:root {
+    --ifm-color-scheme: dark;
+    --ifm-background-color: #1e1e2e;
+    --ifm-background-surface-color: #313244;
+    --ifm-color-black: #11111b;
+    --ifm-font-color-base: #cdd6f4;
+}
+
+
+/* 
+    TODO: Light theme catppuccin latte
+    [data-theme='light']:root {
+        --ifm-color-scheme: light;
+        --ifm-background-color: ##eff1f5;
+        --ifm-background-surface-color: #ccd0da;
+        --ifm-color-white: #e6e9ef;
+        --ifm-font-color-base: ##4c4f69;
+    } 
+*/
