@@ -26,8 +26,6 @@ jobs:
 
       - name: Install Node
         uses: actions/setup-node@v4.0.2
-        with:
-          cache: "pnpm"
 
       - name: Install Moonwave CLI
         run: pnpm i -g moonwave
