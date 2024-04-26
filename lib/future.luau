@@ -80,7 +80,7 @@ export type Future<T> = typeof(Future) & {
 	_status: Status,
 }
 
-local function _constructor<T>(fn: (Signal<()>, Signal<T, Status>) -> (), args: { any })
+local function _constructor<T>(fn: (Signal<()>, Signal<T, Status>) -> ())
 	return setmetatable(
 		{
 			_thread = coroutine.create(fn),
@@ -115,7 +115,7 @@ function Future.new<T>(fn: (...any) -> T, args: { any })
 
 		local ret = fn(table.unpack(args))
 		retEvt:Fire(ret, "ready")
-	end, args)
+	end)
 end
 
 --[=[
@@ -132,9 +132,9 @@ function Future.try<T>(fn: (...any) -> T, args: { any })
 		spawnEvt:Fire()
 
 		local ok, ret = pcall(fn, table.unpack(args))
-		local result: Result<T, string> = if ok then Ok(ret) else Err(ret)
-		retEvt:Fire(result, "ready")
-	end, args)
+		local res: Result<T, string> = if ok then Ok(ret) else Err(ret)
+		retEvt:Fire(res, "ready")
+	end)
 end
 
 --[=[

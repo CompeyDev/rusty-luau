@@ -1,43 +1,46 @@
 name: CI
 
 on:
-     push:
-     pull_request:
-     workflow_dispatch:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 defaults:
-     run:
-          shell: bash
+  run:
+    shell: bash
 
 jobs:
-     fmt:
-          runs-on: ubuntu-latest
-          steps:
-               - name: Checkout repository
-                 uses: actions/checkout@v4
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-               - name: Install tooling
-                 uses: ok-nick/setup-aftman@v0.4.2
-                 with:
-                      cache: true
+      - name: Install tooling
+        uses: ok-nick/setup-aftman@v0.4.2
+        with:
+          cache: true
 
-               - name: Check formatting
-                 run: stylua -c -v .
+      - name: Check formatting
+        run: stylua -c -v .
 
-     lint:
-          needs: ["fmt"]
-          runs-on: ubuntu-latest
-          steps:
-               - name: Checkout repository
-                 uses: actions/checkout@v4
+  lint:
+    needs: ["fmt"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-               - name: Install dependencies
-                 run: wally install
+      - name: Install dependencies
+        run: wally install
 
-               - name: Install tooling
-                 uses: ok-nick/setup-aftman@v0.4.2
-                 with:
-                      cache: true
+      - name: Install tooling
+        uses: ok-nick/setup-aftman@v0.4.2
+        with:
+          cache: true
 
-               - name: Analyze
-                 run: luau-lsp analyze --ignore="Packages/**" --settings=".vscode/settings.json" lib/ examples/ mod.luau
+      - name: Analyze
+        run: luau-lsp analyze --ignore="Packages/**" --settings=".vscode/settings.json" lib/ examples/ mod.luau
+
+      - name: lint
+        run: selene .

@@ -453,7 +453,8 @@ function Result.inspectErr<T, E>(self: Result<T, E>, op: (val: E) -> ()): Result
 end
 
 -- TODO: Iterator traits
-function Result.iter(): never
+-- selene: allow(unused_variable)
+function Result.iter<T, E>(self: Result<T, E>): never
 	return error("Unimplemented: `Result:iter()`")
 end
 
@@ -540,6 +541,7 @@ function Result.unwrap<T, E>(self: Result<T, E>): T | never
 end
 
 -- TODO: default values for types
+-- selene: allow(unused_variable)
 function Result.unwrapOrDefault<T, E>(self: Result<T, E>): never
 	return error("Unimplemented: `Result:unwrapOrDefault()`")
 end
@@ -596,9 +598,11 @@ function Result.unwrapErr<T, E>(self: Result<T, E>): E | never
 end
 
 -- TODO: How the fuck do I implement this?
+-- selene: allow(unused_variable)
 function Result.intoOk<T, E>(self: Result<T, E>): never
 	return error("Unimplemented: `Result:intoOk()`")
 end
+-- selene: allow(unused_variable)
 function Result.intoErr<T, E>(self: Result<T, E>): never
 	return error("Unimplemented: `Result:intoErr()`")
 end
