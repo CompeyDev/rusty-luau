@@ -1,7 +1,7 @@
 
 <img align="right" src="https://rusty-luau.devcomp.xyz/logo.png" />
 
-## [read the docs](https://rusty-luau.devcomp.xyz/)
+## [read the docs](https://rusty-luau.devcomp.xyz/api/)
 
 strongly typed implementations of various rust idioms in luau. 
 
