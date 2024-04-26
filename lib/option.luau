@@ -3,8 +3,9 @@ local tableEq = require("util").tableEq
 --[=[
 	@class Option
 
-	Type [Option] represents an optional value: every [Option] is either [Some] and contains a 
-	value, or [None], and does not. Common uses of an [Option] may involve:
+	Type [Option] represents an optional value: every [Option] is either [Option:Some] 
+	and contains a value, or [Option:None], and does not. Common uses of an [Option]
+	may involve:
 
 	* Initial values
 	* Return values for functions that are not defined over their entire input range (partial functions)
