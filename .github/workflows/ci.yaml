@@ -38,6 +38,9 @@ jobs:
           
       - name: Install dependencies
         run: wally install
+        
+      - name: Setup lune typedefs
+        run: lune setup
 
       - name: Analyze
         run: luau-lsp analyze --ignore="Packages/**" --settings=".vscode/settings.json" lib/ examples/ mod.luau
