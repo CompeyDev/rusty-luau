@@ -30,14 +30,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: wally install
-
+        
       - name: Install tooling
         uses: ok-nick/setup-aftman@v0.4.2
         with:
           cache: true
+          
+      - name: Install dependencies
+        run: wally install
 
       - name: Analyze
         run: luau-lsp analyze --ignore="Packages/**" --settings=".vscode/settings.json" lib/ examples/ mod.luau
