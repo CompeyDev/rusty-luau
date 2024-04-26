@@ -9,6 +9,10 @@ permissions:
   pages: write
   id-token: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   deploy:
     environment:
@@ -28,21 +32,16 @@ jobs:
         uses: actions/setup-node@v4.0.2
 
       - name: Register aliases for NPM command
-        shell: bash
         run: |
-          rc=/tmp/rcfile
+          rc=$HOME/.bashrc
           echo 'shopt -s expand_aliases' > $rc
           echo 'alias npm="pnpm" ' >> $rc
 
       - name: Install Moonwave CLI
-        run: |
-          source /tmp/rcfile
-          npm i -g moonwave
+        run: npm i -g moonwave
 
       - name: Build static site
-        run: | 
-          source /tmp/rcfile
-          moonwave build
+        run: moonwave build
 
       - name: Setup GitHub pages
         uses: actions/configure-pages@v3
