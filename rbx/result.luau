@@ -1,4 +1,4 @@
-local tableEq = require("./util.luau").tableEq
+local tableEq = require(script.Parent:WaitForChild('util')).tableEq
 
 --[=[
 	@class Result
@@ -68,7 +68,7 @@ local Result = {}
 export type Result<T, E> = typeof(Result) & {
 	_value: T,
 	_error: E,
-	typeId: "Result",
+	typeId: "Result"
 }
 
 --[=[

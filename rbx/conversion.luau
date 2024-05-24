@@ -7,13 +7,13 @@
 	would rather import this conversion module.
 ]]
 
-local option = require("./option.luau")
+local option = require(script.Parent:WaitForChild('option'))
 local Option = option.Option
 export type Option<T> = option.Option<T>
 local None = option.None
 local Some = option.Some
 
-local result = require("./result.luau")
+local result = require(script.Parent:WaitForChild('result'))
 local Result = result.Result
 export type Result<T, E> = result.Result<T, E>
 local Ok = result.Ok

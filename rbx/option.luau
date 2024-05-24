@@ -1,4 +1,4 @@
-local tableEq = require("./util.luau").tableEq
+local tableEq = require(script.Parent:WaitForChild('util')).tableEq
 
 --[=[
 	@class Option
@@ -28,7 +28,7 @@ local Option = {}
 
 export type Option<T> = typeof(Option) & {
 	_optValue: T?,
-	typeId: "Option",
+	typeId: "Option"
 }
 
 --[=[

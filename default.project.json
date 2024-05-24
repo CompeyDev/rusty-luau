@@ -1,0 +1,9 @@
+{
+  "name": "rusty-luau",
+  "tree": {
+    "$path": "rbx",
+    "deps": {
+      "$path": "deps.luau"
+    }
+  }
+}

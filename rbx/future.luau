@@ -1,26 +1,26 @@
 local isRoblox = _VERSION == "Luau"
 local isLune = _VERSION:find("Lune") == 1
-local mod = if isLune then require("../deps") else require(script.Parent.deps)
+local mod = if isLune then require(script.Parent.Parent:WaitForChild('deps'))else require(script.Parent.deps)
 local requires = mod(isRoblox, isLune)
 
 local Signal: {
-	new: <T...>() -> Signal<T...>,
+	new: <T...>() -> Signal<T...>
 } = requires.signal
 type Signal<T...> = {
-	Fire: (self: Signal<T...>, T...) -> (),
+	Fire: (self: Signal<T...>,T...) -> (),
 	Connect: (self: Signal<T...>, callback: (T...) -> ()) -> () -> (),
 	Once: (self: Signal<T...>, callback: (T...) -> ()) -> () -> (),
-	DisconnectAll: (self: Signal<T...>) -> (),
+	DisconnectAll: (self: Signal<T...>) -> ()
 }
 
 local task = requires.task
 
-local result = require("./result")
+local result = require(script.Parent:WaitForChild('result'))
 type Result<T, E> = result.Result<T, E>
 local Ok = result.Ok
 local Err = result.Err
 
-local option = require("./option")
+local option = require(script.Parent:WaitForChild('option'))
 type Option<T> = option.Option<T>
 local None = option.None
 local Some = option.Some
@@ -88,7 +88,7 @@ export type Future<T> = typeof(Future) & {
 	_thread: thread,
 	_spawnEvt: Signal<()>,
 	_retEvt: Signal<T | Result<T, string>, Status>,
-	_status: Status,
+	_status: Status
 }
 
 local function _constructor<T>(fn: (Signal<()>, Signal<T, Status>) -> ())
