@@ -1,26 +1,20 @@
 local isRoblox = _VERSION == "Luau"
 local isLune = _VERSION:find("Lune") == 1
-local mod = if isLune then require(script.Parent.Parent:WaitForChild('deps'))else require(script.Parent.deps)
-local requires = mod(isRoblox, isLune)
+local deps = if isLune then require(script.Parent.Parent.deps)else require(script.Parent.deps)
+local requires = deps(isRoblox, isLune)
+local util = require(script.Parent.util)
 
-local Signal: {
-	new: <T...>() -> Signal<T...>
-} = requires.signal
-type Signal<T...> = {
-	Fire: (self: Signal<T...>,T...) -> (),
-	Connect: (self: Signal<T...>, callback: (T...) -> ()) -> () -> (),
-	Once: (self: Signal<T...>, callback: (T...) -> ()) -> () -> (),
-	DisconnectAll: (self: Signal<T...>) -> ()
-}
+local Signal = util.Signal
+type Signal<T...> = util.Signal<T...>
 
 local task = requires.task
 
-local result = require(script.Parent:WaitForChild('result'))
+local result = require(script.Parent.result)
 type Result<T, E> = result.Result<T, E>
 local Ok = result.Ok
 local Err = result.Err
 
-local option = require(script.Parent:WaitForChild('option'))
+local option = require(script.Parent.option)
 type Option<T> = option.Option<T>
 local None = option.None
 local Some = option.Some
@@ -210,13 +204,13 @@ end
 	@param self Future<T> 
 	@return T -- The value returned by the function on completion
 ]=]
-function Future.await<T>(self: Future<T>): T
+function Future.await<T>(self: Future<T>): Option<T>
 	while true do
 		local status: Status, ret: Option<T> = self:poll()
 
 		if status == "ready" then
 			-- Safe to unwrap, we know it must not be nil
-			return ret:unwrap()
+			return ret
 		end
 	end
 end

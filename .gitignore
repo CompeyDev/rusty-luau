@@ -3,3 +3,6 @@ Packages/
 
 # Moonwave compiled docs
 build
+
+# Bundled roblox files
+rbx

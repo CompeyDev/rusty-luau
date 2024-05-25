@@ -5,7 +5,7 @@
       current: "path",
       target: {
         name: "roblox",
-        indexing_style: "wait_for_child",
+        indexing_style: "property",
       },
     },
   ],

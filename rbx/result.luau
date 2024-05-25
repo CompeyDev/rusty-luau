@@ -1,4 +1,4 @@
-local tableEq = require(script.Parent:WaitForChild('util')).tableEq
+local tableEq = require(script.Parent.util).tableEq
 
 --[=[
 	@class Result
