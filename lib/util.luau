@@ -1,6 +1,9 @@
 local isRoblox = _VERSION == "Luau"
 local isLune = _VERSION:find("Lune") == 1
-local deps = if isLune then require("../deps") elseif isRoblox then require(script.Parent.deps) else error("Unsupported Runtime!")
+local deps = if isLune
+	then require("../deps")
+	elseif isRoblox then require(script.Parent.deps)
+	else error("Unsupported Runtime!")
 local requires = deps(isRoblox, isLune)
 
 local LuauSignal: {
@@ -53,7 +56,7 @@ end
 
 local RobloxEvent = {}
 type RobloxEvent<T...> = Signal<T...> & {
-	_inner: BindableEvent
+	_inner: BindableEvent,
 }
 
 function RobloxEvent.new<T...>()
@@ -62,9 +65,9 @@ function RobloxEvent.new<T...>()
 	instance.Name = tostring({}):split(" ")[2]
 
 	return setmetatable({
-		_inner = instance
+		_inner = instance,
 	}, {
-		__index = RobloxEvent
+		__index = RobloxEvent,
 	})
 end
 
@@ -74,12 +77,12 @@ end
 
 function RobloxEvent.Connect<T...>(self: RobloxEvent<T...>, callback: (T...) -> ())
 	local conn = self._inner.Event:Connect(callback)
-	
+
 	return {
 		DisconnectAll = function<T...>(self: RobloxEvent<T...>)
 			conn:Disconnect()
 			self._inner:Destroy()
-		end
+		end,
 	}
 end
 
@@ -90,7 +93,7 @@ function RobloxEvent.Once<T...>(self: RobloxEvent<T...>, callback: (T...) -> ())
 		DisconnectAll = function<T...>(self: RobloxEvent<T...>)
 			conn:Disconnect()
 			self._inner:Destroy()
-		end
+		end,
 	}
 end
 
