@@ -43,7 +43,7 @@ jobs:
         run: lune setup
 
       - name: Analyze
-        run: luau-lsp analyze --ignore="Packages/**" --settings=".vscode/settings.json" lib/ examples/ mod.luau
+        run: luau-lsp analyze --ignore="Packages/**" --settings=".vscode/settings.json" lib/ examples/ deps.luau
 
       - name: lint
         run: selene .
