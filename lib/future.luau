@@ -1,20 +1,15 @@
-local isRoblox = _VERSION == "Luau"
-local isLune = _VERSION:find("Lune") == 1
-local deps = if isLune then require("../deps") else require(script.Parent.deps)
-local requires = deps(isRoblox, isLune)
-local util = require("./util.luau")
+local task = require("@lune/task")
 
-local Signal = util.Signal
-type Signal<T...> = util.Signal<T...>
+local mod = require("../mod")
+local Signal = mod.signal
+type Signal<T...> = mod.Signal<T...>
 
-local task = requires.task
-
-local result = require("./result")
+local result = require("result")
 type Result<T, E> = result.Result<T, E>
 local Ok = result.Ok
 local Err = result.Err
 
-local option = require("./option")
+local option = require("option")
 type Option<T> = option.Option<T>
 local None = option.None
 local Some = option.Some
@@ -91,10 +86,7 @@ local function _constructor<T>(fn: (Signal<()>, Signal<T, Status>) -> ())
 			_thread = coroutine.create(fn),
 
 			_spawnEvt = Signal.new(),
-			-- This is a hack to make luau realize that this object and
-			-- Future<T> are related
-			_retEvt = Signal.new() :: Signal<T | Result<T, string>, Status>,
-
+			_retEvt = Signal.new(),
 			_status = "initialized",
 		} :: Future<T>,
 		{
@@ -204,13 +196,13 @@ end
 	@param self Future<T> 
 	@return T -- The value returned by the function on completion
 ]=]
-function Future.await<T>(self: Future<T>): Option<T>
+function Future.await<T>(self: Future<T>): T
 	while true do
 		local status: Status, ret: Option<T> = self:poll()
 
 		if status == "ready" then
 			-- Safe to unwrap, we know it must not be nil
-			return ret
+			return ret:unwrap()
 		end
 	end
 end

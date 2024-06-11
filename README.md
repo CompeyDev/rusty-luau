@@ -21,6 +21,6 @@ currently, the following implementations are available:
 [docs-image]: https://github.com/CompeyDev/rusty-luau/actions/workflows/docs.yaml/badge.svg
 [docs-link]: https://rusty-luau.devcomp.xyz/
 [license-image]: https://img.shields.io/github/license/CompeyDev/rusty-luau
-[license-link]: https://github.com/CompeyDev/rusty-luau/blob/main/LICENSE.md
+[license-link]: /LICENSE.md
 [ci-image]: https://github.com/CompeyDev/rusty-luau/actions/workflows/ci.yaml/badge.svg
 [ci-link]: https://github.com/CompeyDev/rusty-luau/actions/workflows/ci.yaml
