@@ -1,2 +1,2 @@
-std = "luau"
+std = "lune"
 exclude = ["Packages/*"]
