@@ -38,15 +38,15 @@ local Err = result.Err
 	@return Option<T>
 ]=]
 function Result.ok<T, E>(self: Result<T, E>): Option<T>
-	if self:isOk() then
-		if self._value == nil then
-			return None()
-		end
+    if self:isOk() then
+        if self._value == nil then
+            return None()
+        end
 
-		return Some(self._value)
-	end
+        return Some(self._value)
+    end
 
-	return None()
+    return None()
 end
 
 --[=[
@@ -68,11 +68,11 @@ end
 	@return Option<E>
 ]=]
 function Result.err<T, E>(self: Result<T, E>): Option<E>
-	if self:isErr() then
-		return Option.new(self._error) :: Option<E>
-	end
+    if self:isErr() then
+        return Option.new(self._error) :: Option<E>
+    end
 
-	return None()
+    return None()
 end
 
 --[=[
@@ -96,17 +96,19 @@ end
 	@return Option<Result<T, E>>
 ]=]
 function Result.transpose<T, E>(self: Result<Option<T>, E>): Option<Result<T, E>>
-	if self._value == None() then
-		return None()
-	elseif self:isOkAnd(function(val): boolean
-		return val._optValue == nil
-	end) then
-		return Some(Ok(self._value._optValue))
-	elseif self:isErr() then
-		return Some(Err(self._error))
-	end
+    if self._value == None() then
+        return None()
+    elseif
+        self:isOkAnd(function(val): boolean
+            return val._optValue == nil
+        end)
+    then
+        return Some(Ok(self._value._optValue))
+    elseif self:isErr() then
+        return Some(Err(self._error))
+    end
 
-	error("`Result` is not transposable")
+    error("`Result` is not transposable")
 end
 
 --[=[
@@ -131,11 +133,11 @@ end
 	@return Result<T, E>
 ]=]
 function Option.okOr<T, E>(self: Option<T>, err: E): Result<T, E>
-	if self:isSome() then
-		return Ok(self._optValue)
-	end
+    if self:isSome() then
+        return Ok(self._optValue)
+    end
 
-	return Err(err)
+    return Err(err)
 end
 
 --[=[
@@ -157,11 +159,11 @@ end
 	@return Result<T, E>
 ]=]
 function Option.okOrElse<T, E>(self: Option<T>, err: () -> E): Result<T, E>
-	if self:isSome() then
-		return Ok(self._optValue :: T)
-	end
+    if self:isSome() then
+        return Ok(self._optValue :: T)
+    end
 
-	return Err(err())
+    return Err(err())
 end
 
 --[=[
@@ -185,26 +187,29 @@ end
 	@return Result<Option<T>, E>
 ]=]
 function Option.transpose<T, E>(self: Option<Result<T, E>>): Result<Option<T>, E>
-	if self:isSome() then
-		local inner = self._optValue
-		assert(self.typeId == "Option" and inner.typeId == "Result", "Only an `Option` of a `Result` can be transposed")
+    if self:isSome() then
+        local inner = self._optValue
+        assert(
+            self.typeId == "Option" and inner.typeId == "Result",
+            "Only an `Option` of a `Result` can be transposed"
+        )
 
-		if inner:isOk() then
-			return Some(Ok(inner._value))
-		elseif inner:isErr() then
-			return Some(Err(inner._error))
-		end
-	end
+        if inner:isOk() then
+            return Some(Ok(inner._value))
+        elseif inner:isErr() then
+            return Some(Err(inner._error))
+        end
+    end
 
-	return Ok(None())
+    return Ok(None())
 end
 
 return {
-	Ok = Ok,
-	Err = Err,
-	Result = Result,
+    Ok = Ok,
+    Err = Err,
+    Result = Result,
 
-	Some = Some,
-	None = None,
-	Option = Option,
+    Some = Some,
+    None = None,
+    Option = Option,
 }
