@@ -82,7 +82,7 @@ type Arms<T, U> = ({ [T]: Arm<T, U> }) -> U
 
 	@param value T -- The value to match on
 	@return matcher Arms<T, U> -- A matcher function to call with the match arms
-```
+	```
 ]=]
 function Match.match<T, U>(value: T): Arms<T, U>
 	local function handleArmType(arm: Arm<T, U>, fnArg: T?): U
