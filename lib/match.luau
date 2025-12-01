@@ -61,28 +61,28 @@ type Arms<T, U> = ({ [T]: Arm<T, U> }) -> U
 	Currently, most traditional pattern matching is not supported, with 
 	the exception of the catch all pattern (`_`).
 	:::
-	
+
 	A common use-case of match is to prevent repetitive `if` statements, when
 	checking against various possible values of a variable:
 
 	```lua
 	local function getGreetingNumber(greeting: string): number
 		return match(greeting) {
-		   ["hello, world"] = 1,
-		   ["hello, mom"] = 2,
-		   _ = function(val)
-			   return #val
-		   end,
-	   }
-   end
+			["hello, world"] = 1,
+			["hello, mom"] = 2,
+			_ = function(val)
+				return #val
+			end,
+		}
+	end
 
-   assert(getGreetingNumber("hello, world") == 1)
-   assert(getGreetingNumber("hello, mom") == 2)
-   assert(getGreetingNumber("hello, john") == 11)
+	assert(getGreetingNumber("hello, world") == 1)
+	assert(getGreetingNumber("hello, mom") == 2)
+	assert(getGreetingNumber("hello, john") == 11)
 
-   @param value T -- The value to match on
-   @return matcher Arms<T, U> -- A matcher function to call with the match arms
-   ```
+	@param value T -- The value to match on
+	@return matcher Arms<T, U> -- A matcher function to call with the match arms
+```
 ]=]
 function Match.match<T, U>(value: T): Arms<T, U>
 	local function handleArmType(arm: Arm<T, U>, fnArg: T?): U
