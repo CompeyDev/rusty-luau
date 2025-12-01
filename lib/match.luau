@@ -85,38 +85,38 @@ type Arms<T, U> = ({ [T]: Arm<T, U> }) -> U
    ```
 ]=]
 function Match.match<T, U>(value: T): Arms<T, U>
-    local function handleArmType(arm: Arm<T, U>, fnArg: T?): U
-        if typeof(arm) == "function" then
-            return arm(fnArg)
-        end
+	local function handleArmType(arm: Arm<T, U>, fnArg: T?): U
+		if typeof(arm) == "function" then
+			return arm(fnArg)
+		end
 
-        return arm :: U
-    end
+		return arm :: U
+	end
 
-    return function(arms)
-        for l, r in arms do
-            -- Skip the catch all arm for now, get back to it
-            -- when we have finished checking for all other
-            -- arms
-            if l == "_" then
-                continue
-            end
+	return function(arms)
+		for l, r in arms do
+			-- Skip the catch all arm for now, get back to it
+			-- when we have finished checking for all other
+			-- arms
+			if l == "_" then
+				continue
+			end
 
-            if value == l then
-                local ret = handleArmType(r, nil)
-                return ret
-            end
-        end
+			if value == l then
+				local ret = handleArmType(r, nil)
+				return ret
+			end
+		end
 
-        -- Since we didn't get any matches, we invoke the catch
-        -- all arm, giving it the value we have
-        local catchAll = arms["_"]
-            or error(
-                `Non exhaustive match pattern, arm not satisfied for: {value}`
-            )
+		-- Since we didn't get any matches, we invoke the catch
+		-- all arm, giving it the value we have
+		local catchAll = arms["_"]
+			or error(
+				`Non exhaustive match pattern, arm not satisfied for: {value}`
+			)
 
-        return handleArmType(catchAll, value)
-    end
+		return handleArmType(catchAll, value)
+	end
 end
 
 return Match.match

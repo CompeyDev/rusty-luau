@@ -73,26 +73,26 @@ export type Status = "initialized" | "pending" | "cancelled" | "ready"
 
 ]=]
 export type Future<T> = typeof(Future) & {
-    _ret: T,
-    _thread: thread,
-    _spawnEvt: Signal<()>,
-    _retEvt: Signal<T | Result<T, string>, Status>,
-    _status: Status,
+	_ret: T,
+	_thread: thread,
+	_spawnEvt: Signal<()>,
+	_retEvt: Signal<T | Result<T, string>, Status>,
+	_status: Status,
 }
 
 local function _constructor<T>(fn: (Signal<()>, Signal<T, Status>) -> ())
-    return setmetatable(
-        {
-            _thread = coroutine.create(fn),
+	return setmetatable(
+		{
+			_thread = coroutine.create(fn),
 
-            _spawnEvt = Signal.new(),
-            _retEvt = Signal.new(),
-            _status = "initialized",
-        } :: Future<T>,
-        {
-            __index = Future,
-        }
-    )
+			_spawnEvt = Signal.new(),
+			_retEvt = Signal.new(),
+			_status = "initialized",
+		} :: Future<T>,
+		{
+			__index = Future,
+		}
+	)
 end
 
 --[=[
@@ -110,14 +110,14 @@ end
 	@return Future<T> -- The constructed future
 ]=]
 function Future.new<T>(fn: (...any) -> T, args: { any })
-    return _constructor(
-        function(spawnEvt: Signal<()>, retEvt: Signal<T, Status>)
-            spawnEvt:Fire()
+	return _constructor(
+		function(spawnEvt: Signal<()>, retEvt: Signal<T, Status>)
+			spawnEvt:Fire()
 
-            local ret = fn(table.unpack(args))
-            retEvt:Fire(ret, "ready")
-        end
-    )
+			local ret = fn(table.unpack(args))
+			retEvt:Fire(ret, "ready")
+		end
+	)
 end
 
 --[=[
@@ -130,18 +130,18 @@ end
 	@return Future<Result<T>> -- The constructed future
 ]=]
 function Future.try<T>(fn: (...any) -> T, args: { any })
-    return _constructor(
-        function(
-            spawnEvt: Signal<()>,
-            retEvt: Signal<Result<T, string>, Status>
-        )
-            spawnEvt:Fire()
+	return _constructor(
+		function(
+			spawnEvt: Signal<()>,
+			retEvt: Signal<Result<T, string>, Status>
+		)
+			spawnEvt:Fire()
 
-            local ok, ret = pcall(fn, table.unpack(args))
-            local res: Result<T, string> = if ok then Ok(ret) else Err(ret)
-            retEvt:Fire(res, "ready")
-        end
-    )
+			local ok, ret = pcall(fn, table.unpack(args))
+			local res: Result<T, string> = if ok then Ok(ret) else Err(ret)
+			retEvt:Fire(res, "ready")
+		end
+	)
 end
 
 --[=[
@@ -153,33 +153,33 @@ end
 	@return (Status, Option<T>) -- Returns the [Status] and an optional return if completed
 ]=]
 function Future.poll<T>(self: Future<T>): (Status, Option<T>)
-    if self._status == "initialized" then
-        self._retEvt:Connect(function(firedRet, status: Status)
-            self._status = status
-            self._ret = firedRet
+	if self._status == "initialized" then
+		self._retEvt:Connect(function(firedRet, status: Status)
+			self._status = status
+			self._ret = firedRet
 
-            -- Cleanup
-            coroutine.yield(self._thread)
-            coroutine.close(self._thread)
+			-- Cleanup
+			coroutine.yield(self._thread)
+			coroutine.close(self._thread)
 
-            self._spawnEvt:DisconnectAll()
-            self._retEvt:DisconnectAll()
-        end)
+			self._spawnEvt:DisconnectAll()
+			self._retEvt:DisconnectAll()
+		end)
 
-        self._spawnEvt:Connect(function()
-            self._status = "pending"
-        end)
+		self._spawnEvt:Connect(function()
+			self._status = "pending"
+		end)
 
-        coroutine.resume(self._thread, self._spawnEvt, self._retEvt)
-    end
+		coroutine.resume(self._thread, self._spawnEvt, self._retEvt)
+	end
 
-    if self._status == "pending" then
-        -- Just wait a bit more for the signal to fire
-        task.wait(0.01)
-    end
+	if self._status == "pending" then
+		-- Just wait a bit more for the signal to fire
+		task.wait(0.01)
+	end
 
-    local retOpt = if self._ret == nil then None() else Some(self._ret)
-    return self._status, retOpt
+	local retOpt = if self._ret == nil then None() else Some(self._ret)
+	return self._status, retOpt
 end
 
 --[=[
@@ -190,8 +190,8 @@ end
 	@param self Future<T>
 ]=]
 function Future.cancel<T>(self: Future<T>)
-    self._retEvt:Fire(nil :: any, "cancelled")
-    self._status = "cancelled"
+	self._retEvt:Fire(nil :: any, "cancelled")
+	self._status = "cancelled"
 end
 
 --[=[
@@ -204,14 +204,14 @@ end
 	@return T -- The value returned by the function on completion
 ]=]
 function Future.await<T>(self: Future<T>): T
-    while true do
-        local status: Status, ret: Option<T> = self:poll()
+	while true do
+		local status: Status, ret: Option<T> = self:poll()
 
-        if status == "ready" then
-            -- Safe to unwrap, we know it must not be nil
-            return ret:unwrap()
-        end
-    end
+		if status == "ready" then
+			-- Safe to unwrap, we know it must not be nil
+			return ret:unwrap()
+		end
+	end
 end
 
 return Future
