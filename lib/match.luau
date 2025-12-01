@@ -90,7 +90,7 @@ function Match.match<T, U>(value: T): Arms<T, U>
             return arm(fnArg)
         end
 
-        return arm
+        return arm :: U
     end
 
     return function(arms)
