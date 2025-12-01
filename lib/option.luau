@@ -661,7 +661,7 @@ end
 
 	If the option already contains a value, the old value is dropped.
 
-	See also [Option:getOrInsert], which doesn’t update the value if the 
+	See also [Option:insert], which doesn’t update the value if the 
 	option already contains [Option:Some].
 	
 	```lua
