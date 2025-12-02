@@ -16,13 +16,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Install tooling
-        uses: CompeyDev/setup-rokit@v0.1.2
-        with:
-          cache: true
+      - name: Setup pesde
+        uses: lumin-org/setup-pesde@v0.4.1
+
+      - name: Install dependencies
+        run: pesde install --locked
 
       - name: Check formatting
-        run: stylua -c -v .
+        run: lune run fmt --check
 
   lint:
     needs: ["fmt"]
@@ -31,19 +32,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         
-      - name: Install tooling
-        uses: CompeyDev/setup-rokit@v0.1.2
-        with:
-          cache: true
-          
+      - name: Setup pesde
+        uses: lumin-org/setup-pesde@v0.4.1
+
       - name: Install dependencies
-        run: wally install
-        
+        run: pesde install --locked
+
       - name: Setup lune typedefs
         run: lune setup
 
       - name: Analyze
-        run: luau-lsp analyze --ignore="Packages/**" --settings=".vscode/settings.json" lib/ examples/ mod.luau
+        run: lune run typecheck 
 
-      - name: lint
-        run: selene .
+      - name: Lint
+        run: lune run lint
+
