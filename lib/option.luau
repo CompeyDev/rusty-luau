@@ -1,4 +1,4 @@
-local tableEq = require("util").tableEq
+local tableEq = require("./util").tableEq
 
 --[=[
 	@class Option
