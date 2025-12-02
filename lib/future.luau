@@ -4,12 +4,12 @@ local mod = require("../mod")
 local Signal = mod.signal
 type Signal<T...> = mod.Signal<T...>
 
-local result = require("result")
+local result = require("./result")
 type Result<T, E> = result.Result<T, E>
 local Ok = result.Ok
 local Err = result.Err
 
-local option = require("option")
+local option = require("./option")
 type Option<T> = option.Option<T>
 local None = option.None
 local Some = option.Some
