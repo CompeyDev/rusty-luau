@@ -1,0 +1,33 @@
+name = "compeydev/rusty_luau"
+version = "0.1.0"
+description = "Strongly typed implementations of various rust idioms in Luau"
+authors = ["Erica Marigold <hi@devcomp.xyz>"]
+repository = "https://github.com/CompeyDev/rusty-luau"
+license = "AGPL-3.0"
+includes = [
+	"README.md",
+	"LICENSE.md",
+	"lib/**/*.luau",
+	"pesde.toml",
+]
+
+[engines]
+pesde = "^0.7.1"
+lune = "^0.10.4"
+
+[target]
+environment = "luau"
+
+[dependencies]
+signal = { name = "ewdev/signal", version = "^0.1.0" }
+
+[dev_dependencies]
+stylua = { name = "pesde/stylua", version = "^2.3.1", target = "lune" }
+luau-lsp = { name = "pesde/luau_lsp", version = "^1.57.1", target = "lune" }
+darklua = { name = "pesde/darklua", version = "^0.17.3", target = "lune" }
+selene = { name = "pesde/selene", version = "^0.29.0+toolchainlib.1", target = "lune" }
+
+[indices]
+default = "https://github.com/pesde-pkg/index"
+
+

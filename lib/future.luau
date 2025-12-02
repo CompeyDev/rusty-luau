@@ -1,8 +1,7 @@
 local task = require("@lune/task")
 
-local mod = require("../mod")
-local Signal = mod.signal
-type Signal<T...> = mod.Signal<T...>
+local Signal = require("../luau_packages/signal")
+type Signal<T...> = Signal.Signal<T...>
 
 local result = require("./result")
 type Result<T, E> = result.Result<T, E>
