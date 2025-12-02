@@ -65,11 +65,13 @@ local tableEq = require("./util").tableEq
 ]=]
 local Result = {}
 
-export type Result<T, E> = typeof(Result) & {
+type ResultData<T, E> = {
 	_value: T,
 	_error: E,
 	typeId: "Result",
 }
+
+export type Result<T, E> = typeof(setmetatable({} :: ResultData<T, E>, Result))
 
 --[=[
 	@within Result
@@ -106,44 +108,18 @@ end
 	@param err E
 	@return Result<T, E>
 ]=]
-function Result.new<T, E>(val: T, err: E)
+function Result.new<T, E>(val: T, err: E): Result<T, E>
+	local typeId: "Result" = "Result"
+	local self = {
+		typeId = typeId,
+	}
+	self._value = val
+	self._error = err
 	return setmetatable(
-		{
-			_value = val,
-			_error = err,
-			typeId = "Result",
-		} :: Result<T, E>,
-		{
-			__index = Result,
-			__tostring = function<T, E>(self: Result<T, E>)
-				if self:isOk() then
-					return `{self.typeId}::Ok({self._value})`
-				end
-
-				if self:isErr() then
-					return `{self.typeId}::Err({self._error})`
-				end
-
-				return `{self.typeId}<T, E>`
-			end,
-			__eq = function<T, E>(self: Result<T, E>, other: Result<T, E>)
-				if
-					typeof(self._value) ~= "table"
-					and typeof(self._error) ~= "table"
-					and typeof(other._value) ~= "table"
-					and typeof(other._error) ~= "table"
-				then
-					return self._value == other._value
-						and self._error == other._error
-				end
-
-				return tableEq(self._value, other._value)
-					and tableEq(self._error, other._error)
-			end,
-
-			-- TODO: Implement equality and arithmetic metamethods
-			-- TODO: Implement __iter, once iterators traits exist
-		}
+		self,
+		Result
+		-- TODO: Implement equality and arithmetic metamethods
+		-- TODO: Implement __iter, once iterators traits exist
 	)
 end
 
@@ -910,6 +886,32 @@ end
 ]=]
 function Result.display<T, E>(self: Result<T, E>): string
 	return tostring(self)
+end
+
+Result.__index = Result
+function Result.__tostring<T, E>(self: Result<T, E>)
+	if self:isOk() then
+		return `{self.typeId}::Ok({self._value})`
+	end
+
+	if self:isErr() then
+		return `{self.typeId}::Err({self._error})`
+	end
+
+	return `{self.typeId}<T, E>`
+end
+function Result.__eq<T, E>(self: Result<T, E>, other: Result<T, E>)
+	if
+		typeof(self._value) ~= "table"
+		and typeof(self._error) ~= "table"
+		and typeof(other._value) ~= "table"
+		and typeof(other._error) ~= "table"
+	then
+		return self._value == other._value and self._error == other._error
+	end
+
+	return tableEq(self._value, other._value)
+		and tableEq(self._error, other._error)
 end
 
 return {
