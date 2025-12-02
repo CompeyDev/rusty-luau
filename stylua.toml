@@ -1,3 +1,4 @@
+syntax = "Luau"
 line_endings = "Unix"
 quote_style = "AutoPreferDouble"
 indent_type = "Tabs"
