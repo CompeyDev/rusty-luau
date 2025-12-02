@@ -1,5 +1,6 @@
-# Installed wally packages
-Packages/
+# Installed pesde packages
+lune_packages/
+luau_packages/
 
 # Moonwave compiled docs
 build
