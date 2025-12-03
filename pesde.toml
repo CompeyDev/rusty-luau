@@ -1,5 +1,5 @@
 name = "compeydev/rusty_luau"
-version = "0.1.0"
+version = "0.2.0"
 description = "Strongly typed implementations of various rust idioms in Luau"
 authors = ["Erica Marigold <hi@devcomp.xyz>"]
 repository = "https://github.com/CompeyDev/rusty-luau"
