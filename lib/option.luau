@@ -26,10 +26,12 @@ local tableEq = require("./util").tableEq
 ]=]
 local Option = {}
 
-export type Option<T> = typeof(Option) & {
+type OptionData<T> = {
 	_optValue: T?,
 	typeId: "Option",
 }
+
+export type Option<T> = typeof(setmetatable({} :: OptionData<T>, Option))
 
 --[=[
 	@within Option
@@ -57,51 +59,20 @@ end
 	@param val T? -- The value to convert into an [Option]
 	@return Option<T>
 ]=]
-function Option.new<T>(val: T?)
+function Option.new<T>(val: T?): Option<T>
+	local typeId: "Option" = "Option"
+	local self = {
+		typeId = typeId,
+	}
+	self._optValue = val
 	return setmetatable(
-		{
-			_optValue = val,
-			typeId = "Option",
-		} :: Option<T>,
-		{
-			__index = Option,
-			__tostring = function<T>(self: Option<T>)
-				if self._optValue == nil then
-					return `{self.typeId}::None`
-				else
-					return `{self.typeId}::Some({self._optValue})`
-				end
-			end,
-
-			__eq = function<T>(self: Option<T>, other: Option<T>): boolean
-				if
-					typeof(self._optValue) == "table"
-					and typeof(other._optValue) == "table"
-				then
-					return tableEq(self._optValue, other._optValue)
-				else
-					return self._optValue == other._optValue
-				end
-			end,
-			__lt = function<T>(self: Option<T>, other: Option<T>): boolean
-				if self:isSome() and other:isSome() then
-					return (self._optValue :: any) < (other._optValue :: any)
-				end
-
-				return false
-			end,
-			__le = function<T>(self: Option<T>, other: Option<T>): boolean
-				if self:isSome() and other:isSome() then
-					return (self._optValue :: any) <= (other._optValue :: any)
-				end
-
-				return false
-			end,
-		}
-
+		self,
+		Option
 		-- TODO: Implement __iter, once iterators traits exist
 	)
 end
+
+Option.__index = Option
 
 --[=[
 	@within Option
@@ -739,8 +710,9 @@ end
 	@param val T
 	@return Option<T>
 ]=]
+
 function Option.replace<T>(self: Option<T>, val: T): Option<T>
-	local current: Option<T> = self
+	local current: Option<T> = table.clone(self)
 	self._optValue = val
 
 	if current:isNone() then
@@ -799,7 +771,7 @@ end
 ]=]
 function Option.zip<T, U>(self: Option<T>, other: Option<U>): Option<{ T | U }>
 	if self:isSome() and other:isSome() then
-		return Some { self._optValue, other._optValue }
+		return Some { self:unwrap(), other:unwrap() }
 	end
 
 	return None()
@@ -929,6 +901,41 @@ end
 ]=]
 function Option.display<T>(self: Option<T>): string
 	return tostring(self)
+end
+
+function Option.__tostring<T>(self: Option<T>)
+	if self._optValue == nil then
+		return `{self.typeId}::None`
+	else
+		return `{self.typeId}::Some({self._optValue})`
+	end
+end
+
+function Option.__eq<T>(self: Option<T>, other: Option<T>): boolean
+	if
+		typeof(self._optValue) == "table"
+		and typeof(other._optValue) == "table"
+	then
+		return tableEq(self._optValue, other._optValue)
+	else
+		return self._optValue == other._optValue
+	end
+end
+
+function Option.__lt<T>(self: Option<T>, other: Option<T>): boolean
+	if self:isSome() and other:isSome() then
+		return (self._optValue :: any) < (other._optValue :: any)
+	end
+
+	return false
+end
+
+function Option.__le<T>(self: Option<T>, other: Option<T>): boolean
+	if self:isSome() and other:isSome() then
+		return (self._optValue :: any) <= (other._optValue :: any)
+	end
+
+	return false
 end
 
 return {
