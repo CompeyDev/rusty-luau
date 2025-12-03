@@ -3,7 +3,6 @@ line_endings = "Unix"
 quote_style = "AutoPreferDouble"
 indent_type = "Tabs"
 call_parentheses = "NoSingleTable"
-syntax = "Luau"
 
 indent_width = 4
 column_width = 80
