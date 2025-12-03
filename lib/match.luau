@@ -48,7 +48,7 @@ type Arm<L, R> = R | (L?) -> R
 	@field result U -- The resolved value of the match expression or the right side of the arm
 
 ]=]
-type Arms<T, U> = ({ [T]: Arm<T, U> }) -> U
+type Arms<T, U> = ({ [T | "_"]: Arm<T, U> }) -> U
 
 --[=[
 	@function match
@@ -110,7 +110,7 @@ function Match.match<T, U>(value: T): Arms<T, U>
 
 		-- Since we didn't get any matches, we invoke the catch
 		-- all arm, giving it the value we have
-		local catchAll = arms["_"]
+		local catchAll = arms["_" :: "_"]
 			or error(
 				`Non exhaustive match pattern, arm not satisfied for: {value}`
 			)
